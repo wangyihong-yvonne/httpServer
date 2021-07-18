@@ -18,10 +18,10 @@ The DELETE HTTP method has the same format as GET. The named document is deleted
 curl -i -X "DELETE" http://localhost:8080/myfile.html
 Implement it in the C function do_delete(FILE *stream, const char *uri, Properties *requestProperties, Properties *responseHeaders) in new files "http_do_delete.c" and "http_do_delete.h" that is called by process_request().
 ### PUT
-The PUT HTTP method creates or replaces a document on the HTTP server at the location specified by the URL. If the file is created in the server, the server returns a 201 "Created" response and sets the "Location" response prop;erty to the server-relative URL path of created file. If the named file is overwritten, the server returns a 200 "OK" response. The content is sent as the request body, after the empty line that ends the request parameters. If the file cannot be created or opened, the server, returns 405: "Method Not Allowed". If the content length is not specified in the request header, the server returns 411: "Length Required" unless block transfer encoding is specified. For the purposes of this exercise, create any intermediate directories specified by the request path. To test this operation use CURL to issue a PUT request to upload a file with length specified in the request header:
-curl -i --upload-file localfile.html -X PUT http://localhost:8080/serverfile.html
-or using block transfer encoding:
-curl -i -H 'Transfer-Encoding:chunked' --upload-file localfile.html -X PUT http://localhost:8080/serverfile.html
+The PUT HTTP method creates or replaces a document on the HTTP server at the location specified by the URL. If the file is created in the server, the server returns a 201 "Created" response and sets the "Location" response prop;erty to the server-relative URL path of created file. If the named file is overwritten, the server returns a 200 "OK" response. The content is sent as the request body, after the empty line that ends the request parameters. If the file cannot be created or opened, the server, returns 405: "Method Not Allowed". If the content length is not specified in the request header, the server returns 411: "Length Required" unless block transfer encoding is specified. For the purposes of this exercise, create any intermediate directories specified by the request path. 
+#### To test this operation use CURL to issue a PUT request to upload a file with length specified in the request header:
+#### curl -i --upload-file localfile.html -X PUT http://localhost:8080/serverfile.html or using block transfer encoding:
+#### curl -i -H 'Transfer-Encoding:chunked' --upload-file localfile.html -X PUT http://localhost:8080/serverfile.html
 Implement it in a new C method do_put(FILE *stream, const char* uri, Properties *requestHeaders, Properties *responseHeaders) in new files "http_do_put.c" and "http_do_post.h" that is called by process_request().
 ### POST
 The POST HTTP method is used to request the server to accept the content as a new subordinate of the resource identified by the request URL. Essentially, the URL is a collection URL. For example it is used to submit form data to a back-end form processor like an registration system. POST sends just the form data name/value pairs as the request body. The server creates a new document and returns "201 "Created" in response and sets the "Location" response property to the server-relative URL path of created file. If the server cannot store the content, it returns 405: "Method Not Allowed". If the content length is not specified in the request header, the server sends back 411: "Length Required" unless block transfer encoding is specified (see example under PUT).
@@ -32,7 +32,7 @@ Age: 24
 Formula: a + b
 are encoded as
 Name=Gareth+Wylie&Age=24&Formula=a+%2B+b
-Use CURL to issue a POST request that URL-encodes its data values like an HTML form (on one line):
+#### Use CURL to issue a POST request that URL-encodes its data values like an HTML form (on one line):
 curl -i --data-urlencode 'Name=Gareth Wylie' --data-urlencode 'Age=24' --data-urlencode 'Formula=a + b' -X POST http://localhost:8080/registration
 Add "-H 'Transfer-Encoding:chunked'" for chunked transfer. The "form-post.html" file in the "forms" subdirectory of the "content" directory that uses the default application/x-www-form-urlencoded encoding type.
 The HTML form encoding type multipart/form-data sends the field names and values in the request body as a multi- part form with each field name and value in its own part, separated from other parts by special delimiter lines. This type of form is used to send non-text valued field values, such as documents, images, and other non-text data. The parts include information that enable the fields and their values to be extracted and processed by a form-processing back end. This is how an image of a user would be sent as part of a registration form for a website.
@@ -46,7 +46,7 @@ Age: 24
 Formula: a + b
 appear as
 Name=Gareth Wylie&Age=24&Formula=a + b
-Use CURL to issue a POST request that formats its data values like an HTML form (on one line):
+#### Use CURL to issue a POST request that formats its data values like an HTML form (on one line):
 curl -i --data 'Name=Gareth Wylie' --data 'Age=24' --data 'Formula=a + b' -H 'Content-Type:text/plain' -X POST http://localhost:8080/registration
 Add "-H 'Transfer-Encoding:chunked'" for chunked transfer. The "form-post-textplain.html" file in the "forms" subdirectory of the "content" directory uses the "text/plain" encoding type.
 Implement the POST processing code in the C method do_post(FILE *stream, const char* uri, Properties *requestHeaders, Properties *responseHeaders) in new files "http_do_post.c" and "http_do_post.h" that is called by process_request().
