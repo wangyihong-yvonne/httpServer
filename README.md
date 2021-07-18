@@ -37,7 +37,7 @@ curl -i --data-urlencode 'Name=Gareth Wylie' --data-urlencode 'Age=24' --data-ur
 Add "-H 'Transfer-Encoding:chunked'" for chunked transfer. The "form-post.html" file in the "forms" subdirectory of the "content" directory that uses the default application/x-www-form-urlencoded encoding type.
 The HTML form encoding type multipart/form-data sends the field names and values in the request body as a multi- part form with each field name and value in its own part, separated from other parts by special delimiter lines. This type of form is used to send non-text valued field values, such as documents, images, and other non-text data. The parts include information that enable the fields and their values to be extracted and processed by a form-processing back end. This is how an image of a user would be sent as part of a registration form for a website.
 
-## Use CURL to issue a POST request that includes a "Profile-pic" field whose value is a PNG file of the user:
+#### Use CURL to issue a POST request that includes a "Profile-pic" field whose value is a PNG file of the user:
 curl -i --form "Name=Gareth Wylie" --form "Age=24" --form "Profile-pic=@/Users/gareth/gareth.png" -X POST http://localhost:8080/registration
 Add "-H 'Transfer-Encoding:chunked'" for chunked transfer. The "form-post-multipart.html" file in the "forms" subdirectory of the "content" directory that uses the multipart/form-data encoding type and allows a profile image to be uploaded.
 The HTML form encoding type text/plain sends the field names and values in the request body, and is similar to application/x-www-form-urlencoded, except that the fields values are not encoded. For example, the fields values
